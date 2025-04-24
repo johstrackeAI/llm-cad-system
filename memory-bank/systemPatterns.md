@@ -178,3 +178,14 @@ def validate_mesh(mesh: "pyvista.PolyData") -> bool:
         raise GeometryError("Mesh must be manifold")
     return True
 ```
+
+## Architectural Patterns [2025-04-24 21:53]
+Package Organization Pattern:
+- core/: System fundamentals, base classes, shared utilities
+- part/: Part-specific logic and operations
+- document/: Document handling and persistence
+
+Module Interaction Pattern:
+- Hierarchical dependency (document -> part -> core)
+- Clear separation of concerns
+- Explicit interface definitions between packages

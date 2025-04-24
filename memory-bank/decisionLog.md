@@ -312,3 +312,24 @@ Implementation Details:
 * Decision: Switch project entirely to Conda for dependency management. Remove `requirements.txt` and use `environment.yml` exclusively.
 * Rationale: Simplifies environment setup, avoids pip/conda conflicts, standardizes on the environment needed for the mandatory `pythonocc-core` dependency (required for STEP export as per user request).
 * Implementation: Created `environment.yml` with all dependencies (`python`, `numpy`, `pyvista`, `pythonocc-core`) sourced from `conda-forge`. Marked `requirements.txt` for deletion.
+
+## Decision [2025-04-24 21:53]
+Modularize cad_system.py into a package structure
+
+### Rationale
+- Improve code organization and maintainability
+- Separate concerns into logical modules
+- Enable better testing and component isolation
+- Facilitate future extensions
+
+### Implementation Strategy
+Split into three main packages:
+- core/: Core system functionality and base classes
+- part/: Part-related functionality and operations
+- document/: Document management and file operations
+
+### Implementation Details
+1. Create package structure with __init__.py files
+2. Migrate existing code into appropriate modules
+3. Update imports and dependencies
+4. Ensure backward compatibility during transition

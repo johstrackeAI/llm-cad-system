@@ -1,56 +1,94 @@
-# LLM-Friendly CAD System
+# Python CAD System
 
-A Computer-Aided Design (CAD) system specifically designed for easy programmability and use by LLM-powered agents. The system provides both 2D and 3D capabilities through a Python API with an object-oriented design.
+A modular Computer-Aided Design (CAD) system implemented in Python, offering parametric 3D modeling capabilities with a focus on geometric primitives and boolean operations.
 
-## Features
+## Package Structure
 
-- Easy to use programmatically
-- Clear and predictable behavior
-- Comprehensive error messages
-- Well-documented interfaces
-- Support for both immediate and parametric modeling
-- Scalable for complex designs
-
-## Core Components
-
-- Geometry primitives (Box, Cylinder)
-- Part creation and transformations
-- Boolean operations (union, difference, intersection)
-- Parametric modeling support
-- Document management with undo/redo capability
-
-## Usage Example
-
-```python
-from cad_system import CADSystem, Part
-
-# Initialize the system
-cs = CADSystem()
-doc = cs.new_document("MyDesign")
-
-# Create parts
-base = Part.box(20, 30, 10)
-hole = Part.cylinder(5, 10).translate(10, 15, 0)
-
-# Perform Boolean operation
-result = difference(base, hole)
-
-# Add to document
-doc.add_part(result)
-
-# Export
-exported_data = doc.export("STEP")
+```
+cad_system/
+├── __init__.py
+├── system.py
+├── core/
+│   ├── geometry/
+│   │   ├── base.py
+│   │   ├── primitives.py
+│   │   └── types.py
+│   └── operations/
+│       ├── boolean.py
+│       └── transforms.py
+├── document/
+│   ├── base.py
+│   ├── io.py
+│   └── visualization.py
+└── part/
+    ├── base.py
+    └── parametric.py
 ```
 
-## Development Status
+## Installation
 
-This is an initial implementation with some features still in development:
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/python-cad-system.git
+cd python-cad-system
+```
 
-- Boolean operations are currently stubs
-- Visualization backend to be implemented
-- Advanced constraint solving for parametric design in progress
-- File I/O support for various formats planned
+2. Create and activate the conda environment:
+```bash
+conda env create -f environment.yml
+conda activate cad-system
+```
 
-## Contributing
+3. Install the package in development mode:
+```bash
+pip install -e .
+```
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+## Basic Usage
+
+```python
+from cad_system.core.geometry import primitives
+from cad_system.core.operations import boolean, transforms
+from cad_system.document import visualization
+
+# Create basic shapes
+cube = primitives.Box(width=10, height=10, depth=10)
+sphere = primitives.Sphere(radius=6)
+
+# Apply boolean operation
+result = boolean.difference(cube, sphere)
+
+# Transform the result
+transformed = transforms.rotate(result, axis='z', angle=45)
+
+# Visualize
+doc = visualization.create_document(transformed)
+doc.show()
+```
+
+## Development Setup
+
+1. Install additional development dependencies:
+```bash
+pip install pytest pytest-cov black isort mypy
+```
+
+2. Run tests:
+```bash
+pytest tests/
+```
+
+3. Format code:
+```bash
+black .
+isort .
+```
+
+4. Run type checking:
+```bash
+mypy cad_system/
+```
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
