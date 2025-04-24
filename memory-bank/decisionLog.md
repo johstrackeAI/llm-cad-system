@@ -72,7 +72,7 @@ This file records architectural and implementation decisions using a list format
      - Complete geometric modeling
      - Robust Boolean operations
    * Cons:
-     - Complex installation
+     - Complex installation (Often requires Conda)
      - Steeper learning curve
      - Heavy dependency
 
@@ -144,7 +144,7 @@ This file records architectural and implementation decisions using a list format
   - ✓ Complete CAD functionality
   - ✓ Highly reliable
   - △ Complex Python bindings
-  - △ Heavy installation
+  - △ Heavy installation (Often requires Conda)
 
 * Use Case Fit:
   - Excellent for professional CAD
@@ -152,7 +152,7 @@ This file records architectural and implementation decisions using a list format
   - Future-proof functionality
 
 * Integration Complexity:
-  - Complex installation process
+  - Complex installation process (Often requires Conda)
   - Steep learning curve
   - Limited documentation
   - Platform dependencies
@@ -299,3 +299,16 @@ Implementation Details:
 * Implemented header section with file metadata
 * Structured data section containing geometric entities
 * Unit testing validates file structure and content
+
+[2025-04-24 21:00:00] - STEP Export Dependency Re-evaluation
+
+* Issue: `pythonocc-core` dependency identified as potentially requiring Conda, conflicting with pip-based `requirements.txt`.
+* Research: Confirmed `pythonocc-core` is best installed via Conda (`conda-forge`). Pure-pip alternatives for *generating* STEP files are limited/non-existent.
+* Decision: Maintain `pythonocc-core` for STEP export but make it an *optional* dependency. Provide a mock implementation when it's not installed. Document Conda installation clearly.
+* Rationale: Provides full STEP capability for users who can use Conda, while offering basic functionality/testing path for others.
+
+[2025-04-24 21:33:00] - Dependency Management Standardization
+
+* Decision: Switch project entirely to Conda for dependency management. Remove `requirements.txt` and use `environment.yml` exclusively.
+* Rationale: Simplifies environment setup, avoids pip/conda conflicts, standardizes on the environment needed for the mandatory `pythonocc-core` dependency (required for STEP export as per user request).
+* Implementation: Created `environment.yml` with all dependencies (`python`, `numpy`, `pyvista`, `pythonocc-core`) sourced from `conda-forge`. Marked `requirements.txt` for deletion.

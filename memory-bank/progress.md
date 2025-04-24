@@ -34,14 +34,18 @@ This file tracks the project's progress using a task list format.
   - ✓ Add error handling for edge cases
   - ✓ Document PyVista-specific implementation details
 
-## Current Tasks
 * File Format Support
-  - [✓] Implement STEP format export
+  - [✓] Implement STEP format export (Requires Conda/pythonocc-core)
   - [✓] Implement STL format export
   - [ ] Add format validation
   - [✓] Create format conversion tests (STL)
   - [✓] Create format conversion tests (STEP)
 
+* Dependency Management
+  - [✓] Standardize on Conda using `environment.yml`
+  - [✓] Remove `requirements.txt`
+
+## Current Tasks
 * Parametric System
   - [ ] Enhance constraint solver
   - [ ] Add more constraint types
@@ -61,3 +65,7 @@ This file tracks the project's progress using a task list format.
 [2025-04-24 20:39:43] - Completed Tasks:
 * Implemented STEP export functionality for CAD system
 * Added unit tests validating STEP export
+
+[2025-04-24 21:33:00] - Completed Tasks:
+* Standardized dependency management on Conda (`environment.yml`).
+* Updated documentation to reflect Conda-only approach.

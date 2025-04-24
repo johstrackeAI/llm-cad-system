@@ -1,0 +1,9 @@
+name: llm-cad-system
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python>=3.8
+  - numpy>=1.21.0
+  - pyvista>=0.38.0
+  - pythonocc-core>=7.6.0
