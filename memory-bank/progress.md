@@ -45,7 +45,6 @@ This file tracks the project's progress using a task list format.
   - [✓] Standardize on Conda using `environment.yml`
   - [✓] Remove `requirements.txt`
 
-## Current Tasks
 * Parametric System
   - [✓] Enhance constraint solver
   - [✓] Add more constraint types
@@ -58,6 +57,15 @@ This file tracks the project's progress using a task list format.
   - [✓] Update imports and dependencies
   - [✓] Implement tests for new structure
   - [✓] Validate system functionality post-migration
+
+## Current Tasks
+* [ ] Implement geometric constraint solving (currently stubs)
+* [ ] Enhance visualization capabilities
+* [ ] Implement spatial indexing
+* [ ] Optimize performance-critical operations
+* [ ] Expand test coverage
+* [ ] Enhance error handling and recovery
+* [ ] Add example-driven documentation
 
 ## Next Steps
 1. Implement STEP/STL format export
