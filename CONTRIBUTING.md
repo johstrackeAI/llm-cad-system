@@ -12,6 +12,59 @@ The project follows a modular architecture:
 - `cad_system/document/`: Document handling and visualization
 - `cad_system/part/`: Part modeling and parametric features
 
+## Constraint System Development
+
+When working with the geometric constraint system:
+
+1. **Constraint Types**:
+   - Follow the base constraint interface in `part/constraints.py`
+   - Implement required methods: `evaluate()`, `get_jacobian()`
+   - Document mathematical formulation in docstring
+
+2. **Testing Constraints**:
+   - Create test cases in `tests/part/test_constraints.py`
+   - Test both success and failure cases
+   - Verify numerical stability
+   - Include edge cases (parallel lines, coincident points)
+
+3. **Performance Considerations**:
+   - Optimize Jacobian matrix computation
+   - Use efficient numerical methods
+   - Profile solver performance for complex systems
+   - Document performance characteristics
+
+4. **Error Handling**:
+   - Provide clear error messages for unsatisfiable constraints
+   - Handle singular systems gracefully
+   - Implement timeout mechanism for iterative solving
+   - Log debugging information when needed
+
+## STL Export Development
+
+When working with the STL export functionality:
+
+1. **Mesh Generation**:
+   - Implement mesh generation in Document.get_mesh_data()
+   - Ensure proper vertex ordering for correct face normals
+   - Handle different geometry types appropriately
+
+2. **Performance**:
+   - Optimize mesh generation for large models
+   - Use efficient numpy operations
+   - Consider chunked writing for large files
+
+3. **Testing**:
+   - Test with various geometry types
+   - Verify STL file format compliance
+   - Check face normal calculations
+   - Test with edge cases (empty geometry, invalid inputs)
+
+4. **Error Handling**:
+   - Validate input geometry
+   - Handle file I/O errors
+   - Provide clear error messages
+   - Check for valid mesh data before export
+
 ## Code Style Guidelines
 
 1. **Python Version**: Use Python 3.8+ features and type hints.
