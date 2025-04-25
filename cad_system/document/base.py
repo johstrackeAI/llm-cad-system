@@ -1,63 +1,39 @@
-"""Base document implementation for managing parts and history."""
+from typing import List, Tuple
+import numpy as np
+from ..core.geometry.primitives import Points
+from ..core.geometry.base import Entity
 
-from typing import List, Optional, Any
-from ..part.base import Part
+class Edge:
+    def __init__(self, points: List[np.ndarray]):
+        self.points = points
 
 class Document:
-    """Represents a CAD document containing parts and history for undo/redo operations."""
-    
-    def __init__(self, name: str) -> None:
-        self.name: str = name
-        self.parts: List[Part] = []
-        self.history: List[Any] = []  # Could be a list of action objects
-        self.redo_stack: List[Any] = []  # Stack for redo operations
-    
-    def add_part(self, part: Part) -> None:
-        """Add a part to the document and record the operation in history.
+    def __init__(self):
+        self.geometry = []
+        self.parts = []
+        self.entities = []
         
-        Args:
-            part: The Part instance to add.
-        """
-        self.parts.append(part)
-        self.history.append(('add', part))
-    
-    def get_part(self, name: str) -> Optional[Part]:
-        """Retrieve a part by name.
+    def add_geometry(self, geom: Entity) -> None:
+        self.geometry.append(geom)
         
-        Args:
-            name: The name of the part to retrieve.
+    def get_mesh_data(self) -> Tuple[np.ndarray, np.ndarray]:
+        vertices = []
+        faces = []
         
-        Returns:
-            The Part instance if found, else None.
-        """
-        for p in self.parts:
-            if p.name == name:
-                return p
-        return None
-    
-    def undo(self) -> Any:
-        """Undo the last action in the document's history.
+        for geom in self.geometry:
+            if isinstance(geom, Points):
+                vert_start = len(vertices)
+                for point in geom.positions:
+                    vertices.append(point)
+                
+                if len(vertices) >= 3:
+                    for i in range(len(vertices) - 2):
+                        faces.append([vert_start, vert_start + i + 1, vert_start + i + 2])
         
-        Returns:
-            The undone action.
-        
-        Raises:
-            RuntimeError: If there are no actions to undo.
-        """
-        if not self.history:
-            raise RuntimeError("No actions to undo.")
-        return self.history.pop()
-    
-    def redo(self) -> None:
-        """Redo the last undone action.
-        
-        Raises:
-            RuntimeError: If there are no actions to redo.
-        """
-        if not self.redo_stack:
-            raise RuntimeError("No actions to redo.")
-        action = self.redo_stack.pop()
-        if action[0] == 'add':
-            part = action[1]
-            self.parts.append(part)
-        self.history.append(action)
+        return np.array(vertices), np.array(faces)
+
+def create_document_from_geometry(geometry_list: List[Entity]) -> Document:
+    doc = Document()
+    for geom in geometry_list:
+        doc.add_geometry(geom)
+    return doc
