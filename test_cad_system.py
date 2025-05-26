@@ -5,6 +5,8 @@ Tests are organized by package structure to match the modular organization.
 
 import unittest
 import os
+import json
+import tempfile
 from unittest.mock import patch
 import numpy as np
 import pyvista as pv
@@ -139,7 +141,7 @@ class TestIO(unittest.TestCase):
         self.cs = CADSystem()
         self.doc = self.cs.new_document("TestDesign")
 
-    @unittest.skip("STEP export not fully implemented")
+    @unittest.skip("STEP export not fully implemented. Fails with mesh to OpenCASCADE conversion error.")
     def test_export_formats(self):
         """Test document export functionality."""
         part = Part("TestPart", Box(15, 25, 35))
@@ -192,6 +194,39 @@ class TestVisualization(unittest.TestCase):
             mock_plotter.show.assert_called_once()
         except Exception as e:
             self.fail(f"Visualization raised an exception: {str(e)}")
+
+# CADSystem Tests
+class TestCADSystem(unittest.TestCase):
+    def setUp(self):
+        self.cs = CADSystem()
+
+    def test_load_document_success(self):
+        """Test loading a document from a valid JSON file."""
+        with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".json") as tmp_file:
+            json.dump({"name": "TestDocName", "parts": []}, tmp_file)
+            tmp_file_path = tmp_file.name
+        
+        doc = self.cs.load_document(tmp_file_path)
+        self.assertIsInstance(doc, Document)
+        self.assertEqual(doc.name, "TestDocName")
+        
+        os.remove(tmp_file_path)
+
+    def test_load_document_file_not_found(self):
+        """Test loading a document from a non-existent file."""
+        with self.assertRaises(FileNotFoundError):
+            self.cs.load_document("non_existent_document.json")
+
+    def test_load_document_invalid_json(self):
+        """Test loading a document from an invalid JSON file."""
+        with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".json") as tmp_file:
+            tmp_file.write('{"name": "TestDocName",')  # Invalid JSON
+            tmp_file_path = tmp_file.name
+        
+        with self.assertRaises(json.JSONDecodeError):
+            self.cs.load_document(tmp_file_path)
+            
+        os.remove(tmp_file_path)
 
 if __name__ == "__main__":
     unittest.main()
