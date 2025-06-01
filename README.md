@@ -1,6 +1,6 @@
 # Python CAD System
 
-A modular Computer-Aided Design (CAD) system implemented in Python, offering parametric 3D modeling capabilities with a focus on geometric primitives and boolean operations.
+A modular Computer-Aided Design (CAD) system implemented in Python, offering parametric 3D modeling capabilities with a focus on geometric primitives, boolean operations, and STL export support.
 
 ## Package Structure
 
@@ -65,6 +65,56 @@ transformed = transforms.rotate(result, axis='z', angle=45)
 doc = visualization.create_document(transformed)
 doc.show()
 ```
+
+## Geometric Constraint System
+
+The CAD system includes a robust geometric constraint solver supporting:
+
+- Distance constraints between entities
+- Angle constraints between directed entities
+- Parallel constraints for vectors/edges
+- Perpendicular constraints for vectors/edges
+
+### Example Usage
+
+```python
+from cad_system.part.parametric import DistanceConstraint, AngleConstraint
+
+# Create constrained geometry
+solver = ConstraintSolver()
+solver.add_constraint(DistanceConstraint([p1, p2], target_distance=1.0))
+solver.add_constraint(AngleConstraint([p1, p2, p3], target_angle=np.pi/2))
+
+# Solve constraints
+if solver.solve():
+    print("Constraints satisfied!")
+```
+
+See `examples/constrained_geometry.py` for a complete demonstration.
+
+## STL Export
+
+The system supports exporting constrained geometry to STL format:
+
+```python
+from cad_system.document.io import export_stl
+
+# Create and constrain geometry
+doc = create_document_from_geometry([p1, p2, p3, p4])
+
+# Export to STL
+export_stl(doc, "output/model.stl")
+```
+
+The STL export pipeline:
+1. Converts geometry to mesh data using Document.get_mesh_data()
+2. Calculates face normals
+3. Outputs binary STL format
+
+See `examples/export_stl.py` for a complete example showing:
+- Creating constrained geometry
+- Solving constraints
+- Exporting to STL format
 
 ## Development Setup
 
